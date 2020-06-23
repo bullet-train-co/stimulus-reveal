@@ -38,6 +38,15 @@ Initialize the controller on a container element, add an action to toggle elemen
 ##### `data-reveal-targets` (default: `[data-reveal]`)
 Setting this attribute to a selector will allow you to change the selector pattern for toggling elements.
 
+##### `data-reveal-keypress`
+Setting this attribute to a comma separated list of lower-case key names will toggle the reveal when they're pressed.
+
+##### `data-reveal-close-keypress`
+Setting this attribute to a comma separated list of lower-case key names will close the reveal when they're pressed.
+
+##### `data-reveal-away`
+Setting this attribute will close the reveal when the user clicks away from the reveal element.
+
 #### Element options
 
 You can set options per element to change how each one behaves.

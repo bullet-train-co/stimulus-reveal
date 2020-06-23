@@ -1,8 +1,8 @@
 {
   "name": "stimulus-reveal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Toggle elements with Stimulus and transitions",
-  "main": "index.js",
+  "main": "dist/stimulus-toggle.js",
   "scripts": {
     "start": "webpack --watch",
     "build": "webpack --env dev && webpack --env build"
