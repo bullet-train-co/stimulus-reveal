@@ -35,5 +35,13 @@
   },
   "dependencies": {
     "stimulus": "^1.1.1"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/initforthe/stimulus-toggle/issues"
+  },
+  "homepage": "https://gitlab.com/initforthe/stimulus-toggle",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/initforthe/stimulus-toggle.git"
   }
 }
