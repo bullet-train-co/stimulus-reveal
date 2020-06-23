@@ -1,5 +1,5 @@
 {
-  "name": "stimulus-toggle",
+  "name": "stimulus-reveal",
   "version": "1.0.0",
   "description": "Toggle elements with Stimulus and transitions",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "keywords": [
     "stimulus",
     "toggle",
+    "reveal",
     "transitions",
     "hide",
     "show"
@@ -37,11 +38,11 @@
     "stimulus": "^1.1.1"
   },
   "bugs": {
-    "url": "https://gitlab.com/initforthe/stimulus-toggle/issues"
+    "url": "https://gitlab.com/initforthe/stimulus-reveal/issues"
   },
-  "homepage": "https://gitlab.com/initforthe/stimulus-toggle",
+  "homepage": "https://gitlab.com/initforthe/stimulus-reveal",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/initforthe/stimulus-toggle.git"
+    "url": "https://gitlab.com/initforthe/stimulus-reveal.git"
   }
 }

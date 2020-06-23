@@ -1,11 +1,11 @@
-# Stimulus Toggle
+# Stimulus Reveal
 
 Stimulus controller to hide/show elements with optional transitions
 
 ## Installation
 
 ```shell
-$ yarn add stimulus-toggle
+$ yarn add stimulus-reveal
 ```
 
 ## Usage
@@ -15,18 +15,18 @@ Register the controller with Stimulus:
 ```javascript
 // application.js
 import { Application } from 'stimulus';
-import { ToggleController } from 'stimulus-toggle'
+import { RevealController } from 'stimulus-reveal'
 
 const application = Application.start()
-application.register('toggle', ToggleController)
+application.register('reveal', RevealController)
 ```
 
-Initialize the controller on a container element, add an action to toggle elements, and add `data-toggle` attributes to elements you want to toggle:
+Initialize the controller on a container element, add an action to toggle elements, and add `data-reveal` attributes to elements you want to toggle:
 
 ```html
-<div data-controller="toggle">
-  <a href="" data-action="click->toggle#toggle">Click me</a>
-  <div hidden data-toggle>I toggle</div>
+<div data-controller="reveal">
+  <a href="" data-action="click->reveal#toggle">Click me</a>
+  <div hidden data-reveal>I toggle</div>
 </div>
 ```
 
@@ -35,7 +35,7 @@ Initialize the controller on a container element, add an action to toggle elemen
 
 #### Top Level options
 
-##### `data-toggle-targets` (default: `[data-toggle]`)
+##### `data-reveal-targets` (default: `[data-reveal]`)
 Setting this attribute to a selector will allow you to change the selector pattern for toggling elements.
 
 #### Element options
@@ -58,9 +58,9 @@ If set, this will enable transitions. A default transition will apply:
 ###### Example
 
 ```html
-<div data-controller="toggle">
-  <a href="" data-action="click->toggle#toggle">Click me</a>
-  <div hidden data-toggle data-transition>I toggle with transitions</div>
+<div data-controller="reveal">
+  <a href="" data-action="click->reveal#toggle">Click me</a>
+  <div hidden data-reveal data-transition>I toggle with transitions</div>
 </div>
 ```
 
@@ -70,9 +70,9 @@ These options can be used to override the default transitions by setting classes
 ###### Example
 
 ```html
-<div data-controller="toggle">
-  <a href="" data-action="click->toggle#toggle">Click me</a>
-  <div hidden data-toggle data-transition
+<div data-controller="reveal">
+  <a href="" data-action="click->reveal#toggle">Click me</a>
+  <div hidden data-reveal data-transition
     data-transition-enter="transition transform ease-out duration-200"
     data-transition-enter-start="opacity-0 -translate-y-6 bg-transparent"
     data-transition-enter-end="opacity-100 translate-y-0 bg-transparent"
@@ -93,9 +93,9 @@ This will show toggled elements.
 ##### Example
 
 ```html
-<div data-controller="toggle">
-  <a href="" data-action="click->toggle#show">Click me</a>
-  <div hidden data-toggle data-transition>I can't be hidden again</div>
+<div data-controller="reveal">
+  <a href="" data-action="click->reveal#show">Click me</a>
+  <div hidden data-reveal data-transition>I can't be hidden again</div>
 </div>
 ```
 
@@ -106,9 +106,9 @@ This will hide toggled elements.
 ##### Example
 
 ```html
-<div data-controller="toggle">
-  <a href="" data-action="click->toggle#hide">Click me</a>
-  <div data-toggle data-transition>I can't be shown again</div>
+<div data-controller="reveal">
+  <a href="" data-action="click->reveal#hide">Click me</a>
+  <div data-reveal data-transition>I can't be shown again</div>
 </div>
 ```
 
@@ -119,9 +119,9 @@ This will toggle toggled elements.
 ##### Example
 
 ```html
-<div data-controller="toggle">
-  <a href="" data-action="click->toggle#toggle">Click me</a>
-  <div hidden data-toggle data-transition>I will show and hide again and again and again</div>
+<div data-controller="reveal">
+  <a href="" data-action="click->reveal#toggle">Click me</a>
+  <div hidden data-reveal data-transition>I will show and hide again and again and again</div>
 </div>
 ```
 

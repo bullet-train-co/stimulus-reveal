@@ -4,7 +4,7 @@ import { Controller } from 'stimulus'
  * Stimulus controller to toggle element visibility
  * @extends Controller
  */
-export class ToggleController extends Controller {
+export class RevealController extends Controller {
   connect() {
     this.data.set('open', this.isOpen)
     this._initCloseKeypressListener()
@@ -52,7 +52,7 @@ export class ToggleController extends Controller {
     event?.preventDefault()
     const targetSelector = this.data.has('targets')
       ? this.data.get('targets')
-      : '[data-toggle]'
+      : '[data-reveal]'
     const targets = this.element.querySelectorAll(targetSelector)
 
     for (const target of targets) {
@@ -127,7 +127,7 @@ export class ToggleController extends Controller {
     const eventName = openState ? 'show' : 'hide'
 
     target.dispatchEvent(
-      new Event(`toggle:${eventName}`, { bubbles: true, cancelable: false })
+      new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
     )
 
     if ('transition' in target.dataset) {
@@ -197,7 +197,7 @@ export class ToggleController extends Controller {
     target.hidden = !openState
 
     target.dispatchEvent(
-      new Event(`toggle:${eventName}`, { bubbles: true, cancelable: false })
+      new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
     )
   }
 
