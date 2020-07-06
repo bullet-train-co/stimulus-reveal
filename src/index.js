@@ -16,7 +16,7 @@ export class RevealController extends Controller {
    * @param {Event} event - an event with a currentTarget DOMElement
    */
   show(event) {
-    if (this.isOpen) return
+    if (this.isOpen || this.isTransitioning) return
 
     this.data.set('open', true)
     this._init(event)
@@ -27,7 +27,7 @@ export class RevealController extends Controller {
    * @param {Event} event - an event with a currentTarget DOMElement
    */
   hide(event) {
-    if (!this.isOpen) return
+    if (!this.isOpen || this.isTransitioning) return
 
     this.data.set('open', false)
     this._init(event)
@@ -74,7 +74,9 @@ export class RevealController extends Controller {
             .get('close-keypress')
             .split(',')
             .includes(event.key.toLowerCase())
-        ) { return }
+        ) {
+          return
+        }
 
         event.stopPropagation()
         this.toggle(event)
@@ -93,7 +95,9 @@ export class RevealController extends Controller {
             .get('keypress')
             .split(',')
             .includes(event.key.toLowerCase())
-        ) { return }
+        ) {
+          return
+        }
 
         event.stopPropagation()
 
@@ -155,6 +159,7 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    */
   _doStartTransition(target) {
+    this.data.set('transitioning', 'true')
     if (this.useTransitionClasses) {
       target.classList.add(...this.transitionClasses.end.split(' '))
       target.classList.remove(...this.transitionClasses.start.split(' '))
@@ -192,6 +197,7 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doCompleteTransition(target, openState) {
+    this.data.set('transitioning', 'false')
     const eventName = openState ? 'shown' : 'hidden'
 
     target.hidden = !openState
@@ -268,5 +274,12 @@ export class RevealController extends Controller {
    */
   get isOpen() {
     return this.data.get('open') === 'true'
+  }
+
+  /**
+   * @private
+   */
+  get isTransitioning() {
+    return this.data.get('transitioning') === 'true'
   }
 }

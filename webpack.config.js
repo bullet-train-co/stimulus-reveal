@@ -4,8 +4,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'stimulus-toggle.js',
-    library: 'stimulusToggle',
+    filename: 'stimulus-reveal.js',
+    library: 'stimulusReveal',
     libraryTarget: 'umd'
   },
   externals: {
@@ -22,9 +22,7 @@ module.exports = {
         test: /\.js$/,
         include: path.resolve(__dirname, 'src'),
         exclude: [/node_modules/],
-        use: [
-          { loader: 'babel-loader' }
-        ]
+        use: [{ loader: 'babel-loader' }]
       }
     ]
   }
