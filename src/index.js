@@ -1,4 +1,4 @@
-import { Controller } from "stimulus";
+import { Controller } from 'stimulus'
 
 /**
  * Stimulus controller to toggle element visibility
@@ -6,9 +6,9 @@ import { Controller } from "stimulus";
  */
 export class RevealController extends Controller {
   connect() {
-    this.data.set("open", this.isOpen);
-    this._initCloseKeypressListener();
-    this._initToggleKeypressListener();
+    this.data.set('open', this.isOpen)
+    this._initCloseKeypressListener()
+    this._initToggleKeypressListener()
   }
 
   /**
@@ -16,10 +16,10 @@ export class RevealController extends Controller {
    * @param {Event} event - an event with a currentTarget DOMElement
    */
   show(event) {
-    if (this.isOpen || this.isTransitioning) return;
+    if (this.isOpen || this.isTransitioning) return
 
-    this.data.set("open", true);
-    this._init(event);
+    this.data.set('open', true)
+    this._init(event)
   }
 
   /**
@@ -27,10 +27,10 @@ export class RevealController extends Controller {
    * @param {Event} event - an event with a currentTarget DOMElement
    */
   hide(event) {
-    if (!this.isOpen || this.isTransitioning) return;
+    if (!this.isOpen || this.isTransitioning) return
 
-    this.data.set("open", false);
-    this._init(event);
+    this.data.set('open', false)
+    this._init(event)
   }
 
   /**
@@ -38,8 +38,8 @@ export class RevealController extends Controller {
    * @param {Event} event - an event with a currentTarget DOMElement
    */
   toggle(event) {
-    this.data.set("open", !this.isOpen);
-    this._init(event);
+    this.data.set('open', !this.isOpen)
+    this._init(event)
   }
 
   // Private methods
@@ -49,38 +49,38 @@ export class RevealController extends Controller {
    * @param {Event} event
    */
   _init(event) {
-    event?.preventDefault();
-    const targetSelector = this.data.has("targets")
-      ? this.data.get("targets")
-      : "[data-reveal]";
-    const targets = this.element.querySelectorAll(targetSelector);
+    event?.preventDefault()
+    const targetSelector = this.data.has('targets')
+      ? this.data.get('targets')
+      : '[data-reveal]'
+    const targets = this.element.querySelectorAll(targetSelector)
 
     for (const target of targets) {
-      this._doInitTransition(target, this.isOpen);
+      this._doInitTransition(target, this.isOpen)
     }
 
-    this._initAwayListener();
+    this._initAwayListener()
   }
 
   /**
    * @private
    */
   _initCloseKeypressListener() {
-    if (this.data.has("close-keypress")) {
-      document.addEventListener("keydown", (event) => {
-        if (!this.isOpen) return;
+    if (this.data.has('close-keypress')) {
+      document.addEventListener('keydown', (event) => {
+        if (!this.isOpen) return
         if (
           !this.data
-            .get("close-keypress")
-            .split(",")
+            .get('close-keypress')
+            .split(',')
             .includes(event.key.toLowerCase())
         ) {
-          return;
+          return
         }
 
-        event.stopPropagation();
-        this.toggle(event);
-      });
+        event.stopPropagation()
+        this.toggle(event)
+      })
     }
   }
 
@@ -88,21 +88,21 @@ export class RevealController extends Controller {
    * @private
    */
   _initToggleKeypressListener() {
-    if (this.data.has("keypress")) {
-      document.addEventListener("keydown", (event) => {
+    if (this.data.has('keypress')) {
+      document.addEventListener('keydown', (event) => {
         if (
           !this.data
-            .get("keypress")
-            .split(",")
+            .get('keypress')
+            .split(',')
             .includes(event.key.toLowerCase())
         ) {
-          return;
+          return
         }
 
-        event.stopPropagation();
+        event.stopPropagation()
 
-        this.toggle(event);
-      });
+        this.toggle(event)
+      })
     }
   }
 
@@ -110,15 +110,15 @@ export class RevealController extends Controller {
    * @private
    */
   _initAwayListener() {
-    if (this.isOpen && this.data.has("away")) {
+    if (this.isOpen && this.data.has('away')) {
       this.awayHandler = (event) => {
         if (this.isOpen && !this.element.contains(event.target)) {
-          this.toggle(event);
-          document.removeEventListener("click", this.awayHandler);
+          this.toggle(event)
+          document.removeEventListener('click', this.awayHandler)
         }
-      };
+      }
 
-      document.addEventListener("click", this.awayHandler);
+      document.addEventListener('click', this.awayHandler)
     }
   }
 
@@ -128,29 +128,29 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doInitTransition(target, openState) {
-    const eventName = openState ? "show" : "hide";
+    const eventName = openState ? 'show' : 'hide'
 
     target.dispatchEvent(
       new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
-    );
+    )
 
-    if ("transition" in target.dataset) {
+    if ('transition' in target.dataset) {
       this.transitionEndHandler = () => {
-        this._didEndTransition(target, openState);
-      };
+        this._didEndTransition(target, openState)
+      }
 
       requestAnimationFrame(() => {
-        this._transitionSetup(target, openState);
+        this._transitionSetup(target, openState)
 
-        target.addEventListener("transitionend", this.transitionEndHandler);
+        target.addEventListener('transitionend', this.transitionEndHandler)
 
         requestAnimationFrame(() => {
-          this._doStartTransition(target);
-        });
-      });
+          this._doStartTransition(target)
+        })
+      })
     } else {
-      target.hidden = !openState;
-      this._doCompleteTransition(target, openState);
+      target.hidden = !openState
+      this._doCompleteTransition(target, openState)
     }
   }
 
@@ -159,18 +159,18 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    */
   _doStartTransition(target) {
-    this.data.set("transitioning", "true");
+    this.data.set('transitioning', 'true')
     if (this.useTransitionClasses) {
-      target.classList.add(...this.transitionClasses.end.split(" "));
-      target.classList.remove(...this.transitionClasses.start.split(" "));
+      target.classList.add(...this.transitionClasses.end.split(' '))
+      target.classList.remove(...this.transitionClasses.start.split(' '))
     } else {
-      target.style.transformOrigin = this.transitions.origin;
-      target.style.transitionProperty = "opacity transform";
-      target.style.transitionDuration = `${this.transitions.duration / 1000}s`;
-      target.style.transitionTimingFunction = "cubic-bezier(0.4, 0.0, 0.2, 1)";
+      target.style.transformOrigin = this.transitions.origin
+      target.style.transitionProperty = 'opacity transform'
+      target.style.transitionDuration = `${this.transitions.duration / 1000}s`
+      target.style.transitionTimingFunction = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
-      target.style.opacity = this.transitions.to.opacity;
-      target.style.transform = `scale(${this.transitions.to.scale / 100})`;
+      target.style.opacity = this.transitions.to.opacity
+      target.style.transform = `scale(${this.transitions.to.scale / 100})`
     }
   }
 
@@ -180,15 +180,15 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _didEndTransition(target, openState) {
-    target.removeEventListener("transitionend", this.transitionEndHandler);
+    target.removeEventListener('transitionend', this.transitionEndHandler)
     if (this.useTransitionClasses) {
-      target.classList.remove(...this.transitionClasses.before.split(" "));
+      target.classList.remove(...this.transitionClasses.before.split(' '))
     } else {
-      target.style.opacity = target.dataset.opacityCache;
-      target.style.transform = target.dataset.transformCache;
-      target.style.transformOrigin = target.dataset.transformOriginCache;
+      target.style.opacity = target.dataset.opacityCache
+      target.style.transform = target.dataset.transformCache
+      target.style.transformOrigin = target.dataset.transformOriginCache
     }
-    this._doCompleteTransition(target, openState);
+    this._doCompleteTransition(target, openState)
   }
 
   /**
@@ -197,14 +197,14 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doCompleteTransition(target, openState) {
-    this.data.set("transitioning", "false");
-    const eventName = openState ? "shown" : "hidden";
+    this.data.set('transitioning', 'false')
+    const eventName = openState ? 'shown' : 'hidden'
 
-    target.hidden = !openState;
+    target.hidden = !openState
 
     target.dispatchEvent(
       new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
-    );
+    )
   }
 
   /**
@@ -213,28 +213,28 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _transitionSetup(target, openState) {
-    this.transitionType = openState ? "transitionEnter" : "transitionLeave";
+    this.transitionType = openState ? 'transitionEnter' : 'transitionLeave'
 
     if (this.transitionType in target.dataset) {
-      this.useTransitionClasses = true;
+      this.useTransitionClasses = true
       this.transitionClasses = this._transitionClasses(
         target,
         this.transitionType
-      );
-      target.classList.add(...this.transitionClasses.before.split(" "));
-      target.classList.add(...this.transitionClasses.start.split(" "));
+      )
+      target.classList.add(...this.transitionClasses.before.split(' '))
+      target.classList.add(...this.transitionClasses.start.split(' '))
     } else {
-      this.useTransitionClasses = false;
-      this.transitions = this._transitionDefaults(openState);
-      target.dataset.opacityCache = target.style.opacity;
-      target.dataset.transformCache = target.style.transform;
-      target.dataset.transformOriginCache = target.style.transformOrigin;
+      this.useTransitionClasses = false
+      this.transitions = this._transitionDefaults(openState)
+      target.dataset.opacityCache = target.style.opacity
+      target.dataset.transformCache = target.style.transform
+      target.dataset.transformOriginCache = target.style.transformOrigin
 
-      target.style.opacity = this.transitions.from.opacity;
-      target.style.transform = `scale(${this.transitions.from.scale / 100})`;
+      target.style.opacity = this.transitions.from.opacity
+      target.style.transform = `scale(${this.transitions.from.scale / 100})`
     }
 
-    if (openState) target.hidden = !openState;
+    if (openState) target.hidden = !openState
   }
 
   /**
@@ -244,16 +244,16 @@ export class RevealController extends Controller {
   _transitionDefaults(openState) {
     return {
       duration: openState ? 200 : 150,
-      origin: "center",
+      origin: 'center',
       from: {
         opacity: openState ? 0 : 1,
-        scale: openState ? 95 : 100,
+        scale: openState ? 95 : 100
       },
       to: {
         opacity: openState ? 1 : 0,
-        scale: openState ? 100 : 95,
-      },
-    };
+        scale: openState ? 100 : 95
+      }
+    }
   }
 
   /**
@@ -265,21 +265,21 @@ export class RevealController extends Controller {
     return {
       before: target.dataset[transitionType],
       start: target.dataset[`${transitionType}Start`],
-      end: target.dataset[`${transitionType}End`],
-    };
+      end: target.dataset[`${transitionType}End`]
+    }
   }
 
   /**
    * @private
    */
   get isOpen() {
-    return this.data.get("open") === "true";
+    return this.data.get('open') === 'true'
   }
 
   /**
    * @private
    */
   get isTransitioning() {
-    return this.data.get("transitioning") === "true";
+    return this.data.get('transitioning') === 'true'
   }
 }
