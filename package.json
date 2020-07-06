@@ -7,6 +7,9 @@
     "start": "webpack --watch",
     "build": "webpack --env dev && webpack --env build"
   },
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "keywords": [
     "stimulus",
     "toggle",

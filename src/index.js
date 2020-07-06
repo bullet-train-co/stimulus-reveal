@@ -5,7 +5,7 @@ import { Controller } from 'stimulus'
  * @extends Controller
  */
 export class RevealController extends Controller {
-  connect() {
+  connect () {
     this.data.set('open', this.isOpen)
     this._initCloseKeypressListener()
     this._initToggleKeypressListener()
@@ -15,7 +15,7 @@ export class RevealController extends Controller {
    * Shows elements connected to the controller.
    * @param {Event} event - an event with a currentTarget DOMElement
    */
-  show(event) {
+  show (event) {
     if (this.isOpen || this.isTransitioning) return
 
     this.data.set('open', true)
@@ -26,7 +26,7 @@ export class RevealController extends Controller {
    * Hides elements connected to the controller.
    * @param {Event} event - an event with a currentTarget DOMElement
    */
-  hide(event) {
+  hide (event) {
     if (!this.isOpen || this.isTransitioning) return
 
     this.data.set('open', false)
@@ -37,7 +37,7 @@ export class RevealController extends Controller {
    * Toggles elements connected to the controller.
    * @param {Event} event - an event with a currentTarget DOMElement
    */
-  toggle(event) {
+  toggle (event) {
     this.data.set('open', !this.isOpen)
     this._init(event)
   }
@@ -48,7 +48,7 @@ export class RevealController extends Controller {
    * @private
    * @param {Event} event
    */
-  _init(event) {
+  _init (event) {
     event?.preventDefault()
     const targetSelector = this.data.has('targets')
       ? this.data.get('targets')
@@ -65,7 +65,7 @@ export class RevealController extends Controller {
   /**
    * @private
    */
-  _initCloseKeypressListener() {
+  _initCloseKeypressListener () {
     if (this.data.has('close-keypress')) {
       document.addEventListener('keydown', (event) => {
         if (!this.isOpen) return
@@ -87,7 +87,7 @@ export class RevealController extends Controller {
   /**
    * @private
    */
-  _initToggleKeypressListener() {
+  _initToggleKeypressListener () {
     if (this.data.has('keypress')) {
       document.addEventListener('keydown', (event) => {
         if (
@@ -109,7 +109,7 @@ export class RevealController extends Controller {
   /**
    * @private
    */
-  _initAwayListener() {
+  _initAwayListener () {
     if (this.isOpen && this.data.has('away')) {
       this.awayHandler = (event) => {
         if (this.isOpen && !this.element.contains(event.target)) {
@@ -127,7 +127,7 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    * @param {boolean} openState
    */
-  _doInitTransition(target, openState) {
+  _doInitTransition (target, openState) {
     const eventName = openState ? 'show' : 'hide'
 
     target.dispatchEvent(
@@ -158,7 +158,7 @@ export class RevealController extends Controller {
    * @private
    * @param {DOMElement} target
    */
-  _doStartTransition(target) {
+  _doStartTransition (target) {
     this.data.set('transitioning', 'true')
     if (this.useTransitionClasses) {
       target.classList.add(...this.transitionClasses.end.split(' '))
@@ -179,7 +179,7 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    * @param {boolean} openState
    */
-  _didEndTransition(target, openState) {
+  _didEndTransition (target, openState) {
     target.removeEventListener('transitionend', this.transitionEndHandler)
     if (this.useTransitionClasses) {
       target.classList.remove(...this.transitionClasses.before.split(' '))
@@ -196,7 +196,7 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    * @param {boolean} openState
    */
-  _doCompleteTransition(target, openState) {
+  _doCompleteTransition (target, openState) {
     this.data.set('transitioning', 'false')
     const eventName = openState ? 'shown' : 'hidden'
 
@@ -212,7 +212,7 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    * @param {boolean} openState
    */
-  _transitionSetup(target, openState) {
+  _transitionSetup (target, openState) {
     this.transitionType = openState ? 'transitionEnter' : 'transitionLeave'
 
     if (this.transitionType in target.dataset) {
@@ -241,7 +241,7 @@ export class RevealController extends Controller {
    * @private
    * @param {boolean} openState
    */
-  _transitionDefaults(openState) {
+  _transitionDefaults (openState) {
     return {
       duration: openState ? 200 : 150,
       origin: 'center',
@@ -261,7 +261,7 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    * @param {string} transitionType
    */
-  _transitionClasses(target, transitionType) {
+  _transitionClasses (target, transitionType) {
     return {
       before: target.dataset[transitionType],
       start: target.dataset[`${transitionType}Start`],
@@ -272,14 +272,14 @@ export class RevealController extends Controller {
   /**
    * @private
    */
-  get isOpen() {
+  get isOpen () {
     return this.data.get('open') === 'true'
   }
 
   /**
    * @private
    */
-  get isTransitioning() {
+  get isTransitioning () {
     return this.data.get('transitioning') === 'true'
   }
 }
