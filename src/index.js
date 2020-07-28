@@ -205,6 +205,10 @@ export class RevealController extends Controller {
     target.dispatchEvent(
       new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
     )
+
+    target.dispatchEvent(
+      new Event('reveal:complete', { bubbles: true, cancelable: false })
+    )
   }
 
   /**
