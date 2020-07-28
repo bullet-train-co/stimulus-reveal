@@ -1,6 +1,6 @@
 {
   "name": "stimulus-reveal",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Toggle elements with Stimulus and transitions",
   "main": "dist/stimulus-reveal.js",
   "scripts": {
