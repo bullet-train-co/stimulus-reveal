@@ -4,7 +4,7 @@ import { Controller } from 'stimulus'
  * Stimulus controller to toggle element visibility
  * @extends Controller
  */
-export class RevealController extends Controller {
+export default class extends Controller {
   connect () {
     this.data.set('open', this.isOpen)
     this._initCloseKeypressListener()
