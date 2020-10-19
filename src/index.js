@@ -18,8 +18,7 @@ export class RevealController extends Controller {
   show (event) {
     if (this.isOpen || this.isTransitioning) return
 
-    this.data.set('open', true)
-    this._init(event)
+    this._init(event, true)
   }
 
   /**
@@ -29,8 +28,7 @@ export class RevealController extends Controller {
   hide (event) {
     if (!this.isOpen || this.isTransitioning) return
 
-    this.data.set('open', false)
-    this._init(event)
+    this._init(event, false)
   }
 
   /**
@@ -38,8 +36,9 @@ export class RevealController extends Controller {
    * @param {Event} event - an event with a currentTarget DOMElement
    */
   toggle (event) {
-    this.data.set('open', !this.isOpen)
-    this._init(event)
+    if (this.isTransitioning) return
+
+    this._init(event, !this.isOpen)
   }
 
   // Private methods
@@ -48,7 +47,7 @@ export class RevealController extends Controller {
    * @private
    * @param {Event} event
    */
-  _init (event) {
+  _init (event, shouldOpen) {
     event?.preventDefault()
     const targetSelector = this.data.has('targets')
       ? this.data.get('targets')
@@ -56,7 +55,7 @@ export class RevealController extends Controller {
     const targets = this.element.querySelectorAll(targetSelector)
 
     for (const target of targets) {
-      this._doInitTransition(target, this.isOpen)
+      this._doInitTransition(target, shouldOpen)
     }
 
     this._initAwayListener()
@@ -128,10 +127,13 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doInitTransition (target, openState) {
-    const eventName = openState ? 'show' : 'hide'
+    console.log('_doInitTransition', openState)
 
     target.dispatchEvent(
-      new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
+      new Event(`reveal:${openState ? 'show' : 'hide'}`, {
+        bubbles: true,
+        cancelable: false
+      })
     )
 
     if ('transition' in target.dataset) {
@@ -149,7 +151,7 @@ export class RevealController extends Controller {
         })
       })
     } else {
-      target.hidden = !openState
+      if (openState) target.hidden = !target.hidden
       this._doCompleteTransition(target, openState)
     }
   }
@@ -159,6 +161,7 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    */
   _doStartTransition (target) {
+    console.log('_doStartTransition')
     this.data.set('transitioning', 'true')
     if (this.useTransitionClasses) {
       target.classList.add(...this.transitionClasses.end.split(' '))
@@ -180,6 +183,7 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _didEndTransition (target, openState) {
+    console.log('_didEndTransition')
     target.removeEventListener('transitionend', this.transitionEndHandler)
     if (this.useTransitionClasses) {
       target.classList.remove(...this.transitionClasses.before.split(' '))
@@ -197,13 +201,17 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doCompleteTransition (target, openState) {
+    console.log('_doCompleteTransition')
     this.data.set('transitioning', 'false')
-    const eventName = openState ? 'shown' : 'hidden'
 
-    target.hidden = !openState
+    if (!openState) target.hidden = !target.hidden
+    this.data.set('open', openState)
 
     target.dispatchEvent(
-      new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
+      new Event(`reveal:${openState ? 'shown' : 'hidden'}`, {
+        bubbles: true,
+        cancelable: false
+      })
     )
 
     target.dispatchEvent(
@@ -217,6 +225,7 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _transitionSetup (target, openState) {
+    console.log('_transitionSetup')
     this.transitionType = openState ? 'transitionEnter' : 'transitionLeave'
 
     if (this.transitionType in target.dataset) {
@@ -237,8 +246,7 @@ export class RevealController extends Controller {
       target.style.opacity = this.transitions.from.opacity
       target.style.transform = `scale(${this.transitions.from.scale / 100})`
     }
-
-    if (openState) target.hidden = !openState
+    if (openState) target.hidden = !target.hidden
   }
 
   /**
