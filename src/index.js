@@ -127,8 +127,6 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doInitTransition (target, openState) {
-    console.log('_doInitTransition', openState)
-
     target.dispatchEvent(
       new Event(`reveal:${openState ? 'show' : 'hide'}`, {
         bubbles: true,
@@ -161,7 +159,6 @@ export class RevealController extends Controller {
    * @param {DOMElement} target
    */
   _doStartTransition (target) {
-    console.log('_doStartTransition')
     this.data.set('transitioning', 'true')
     if (this.useTransitionClasses) {
       target.classList.add(...this.transitionClasses.end.split(' '))
@@ -183,7 +180,6 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _didEndTransition (target, openState) {
-    console.log('_didEndTransition')
     target.removeEventListener('transitionend', this.transitionEndHandler)
     if (this.useTransitionClasses) {
       target.classList.remove(...this.transitionClasses.before.split(' '))
@@ -201,7 +197,6 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doCompleteTransition (target, openState) {
-    console.log('_doCompleteTransition')
     this.data.set('transitioning', 'false')
 
     if (!openState) target.hidden = !target.hidden
@@ -225,7 +220,6 @@ export class RevealController extends Controller {
    * @param {boolean} openState
    */
   _transitionSetup (target, openState) {
-    console.log('_transitionSetup')
     this.transitionType = openState ? 'transitionEnter' : 'transitionLeave'
 
     if (this.transitionType in target.dataset) {
