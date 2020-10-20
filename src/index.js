@@ -18,8 +18,7 @@ export default class RevealController extends Controller {
   show (event) {
     if (this.isOpen || this.isTransitioning) return
 
-    this.data.set('open', true)
-    this._init(event)
+    this._init(event, true)
   }
 
   /**
@@ -29,8 +28,7 @@ export default class RevealController extends Controller {
   hide (event) {
     if (!this.isOpen || this.isTransitioning) return
 
-    this.data.set('open', false)
-    this._init(event)
+    this._init(event, false)
   }
 
   /**
@@ -38,8 +36,9 @@ export default class RevealController extends Controller {
    * @param {Event} event - an event with a currentTarget DOMElement
    */
   toggle (event) {
-    this.data.set('open', !this.isOpen)
-    this._init(event)
+    if (this.isTransitioning) return
+
+    this._init(event, !this.isOpen)
   }
 
   // Private methods
@@ -48,7 +47,7 @@ export default class RevealController extends Controller {
    * @private
    * @param {Event} event
    */
-  _init (event) {
+  _init (event, shouldOpen) {
     event?.preventDefault()
     const targetSelector = this.data.has('targets')
       ? this.data.get('targets')
@@ -56,7 +55,7 @@ export default class RevealController extends Controller {
     const targets = this.element.querySelectorAll(targetSelector)
 
     for (const target of targets) {
-      this._doInitTransition(target, this.isOpen)
+      this._doInitTransition(target, shouldOpen)
     }
 
     this._initAwayListener()
@@ -128,10 +127,11 @@ export default class RevealController extends Controller {
    * @param {boolean} openState
    */
   _doInitTransition (target, openState) {
-    const eventName = openState ? 'show' : 'hide'
-
     target.dispatchEvent(
-      new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
+      new Event(`reveal:${openState ? 'show' : 'hide'}`, {
+        bubbles: true,
+        cancelable: false
+      })
     )
 
     if ('transition' in target.dataset) {
@@ -149,7 +149,7 @@ export default class RevealController extends Controller {
         })
       })
     } else {
-      target.hidden = !openState
+      if (openState) target.hidden = !target.hidden
       this._doCompleteTransition(target, openState)
     }
   }
@@ -198,12 +198,15 @@ export default class RevealController extends Controller {
    */
   _doCompleteTransition (target, openState) {
     this.data.set('transitioning', 'false')
-    const eventName = openState ? 'shown' : 'hidden'
 
-    target.hidden = !openState
+    if (!openState) target.hidden = !target.hidden
+    this.data.set('open', openState)
 
     target.dispatchEvent(
-      new Event(`reveal:${eventName}`, { bubbles: true, cancelable: false })
+      new Event(`reveal:${openState ? 'shown' : 'hidden'}`, {
+        bubbles: true,
+        cancelable: false
+      })
     )
 
     target.dispatchEvent(
@@ -237,8 +240,7 @@ export default class RevealController extends Controller {
       target.style.opacity = this.transitions.from.opacity
       target.style.transform = `scale(${this.transitions.from.scale / 100})`
     }
-
-    if (openState) target.hidden = !openState
+    if (openState) target.hidden = !target.hidden
   }
 
   /**
