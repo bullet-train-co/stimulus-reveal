@@ -15,7 +15,7 @@ Register the controller with Stimulus:
 ```javascript
 // application.js
 import { Application } from 'stimulus';
-import { RevealController } from 'stimulus-reveal'
+import RevealController from 'stimulus-reveal'
 
 const application = Application.start()
 application.register('reveal', RevealController)
