@@ -4,7 +4,7 @@ import { Controller } from 'stimulus'
  * Stimulus controller to toggle element visibility
  * @extends Controller
  */
-export default class extends Controller {
+export default class RevealController extends Controller {
   connect () {
     this.data.set('open', this.isOpen)
     this._initCloseKeypressListener()
@@ -287,3 +287,7 @@ export default class extends Controller {
     return this.data.get('transitioning') === 'true'
   }
 }
+
+export {
+  RevealController
+} 
