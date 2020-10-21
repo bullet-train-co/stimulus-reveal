@@ -145,7 +145,7 @@ export default class RevealController extends Controller {
         target.addEventListener('transitionend', this.transitionEndHandler)
 
         requestAnimationFrame(() => {
-          this._doStartTransition(target)
+          this._doStartTransition(target, openState)
         })
       })
     } else {
@@ -158,19 +158,24 @@ export default class RevealController extends Controller {
    * @private
    * @param {DOMElement} target
    */
-  _doStartTransition (target) {
+  _doStartTransition (target, openState) {
     this.data.set('transitioning', 'true')
-    if (this.useTransitionClasses) {
-      target.classList.add(...this.transitionClasses.end.split(' '))
-      target.classList.remove(...this.transitionClasses.start.split(' '))
+    if (target.dataset.useTransitionClasses === 'true') {
+      const transitionClasses = this._transitionClasses(
+        target,
+        this.transitionType
+      )
+      target.classList.add(...transitionClasses.end.split(' '))
+      target.classList.remove(...transitionClasses.start.split(' '))
     } else {
-      target.style.transformOrigin = this.transitions.origin
+      const transitions = this._transitionDefaults(openState)
+      target.style.transformOrigin = transitions.origin
       target.style.transitionProperty = 'opacity transform'
-      target.style.transitionDuration = `${this.transitions.duration / 1000}s`
+      target.style.transitionDuration = `${transitions.duration / 1000}s`
       target.style.transitionTimingFunction = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
-      target.style.opacity = this.transitions.to.opacity
-      target.style.transform = `scale(${this.transitions.to.scale / 100})`
+      target.style.opacity = transitions.to.opacity
+      target.style.transform = `scale(${transitions.to.scale / 100})`
     }
   }
 
@@ -181,8 +186,12 @@ export default class RevealController extends Controller {
    */
   _didEndTransition (target, openState) {
     target.removeEventListener('transitionend', this.transitionEndHandler)
-    if (this.useTransitionClasses) {
-      target.classList.remove(...this.transitionClasses.before.split(' '))
+    if (target.dataset.useTransitionClasses === 'true') {
+      const transitionClasses = this._transitionClasses(
+        target,
+        this.transitionType
+      )
+      target.classList.remove(...transitionClasses.before.split(' '))
     } else {
       target.style.opacity = target.dataset.opacityCache
       target.style.transform = target.dataset.transformCache
@@ -223,22 +232,22 @@ export default class RevealController extends Controller {
     this.transitionType = openState ? 'transitionEnter' : 'transitionLeave'
 
     if (this.transitionType in target.dataset) {
-      this.useTransitionClasses = true
-      this.transitionClasses = this._transitionClasses(
+      target.dataset.useTransitionClasses = true
+      const transitionClasses = this._transitionClasses(
         target,
         this.transitionType
       )
-      target.classList.add(...this.transitionClasses.before.split(' '))
-      target.classList.add(...this.transitionClasses.start.split(' '))
+      target.classList.add(...transitionClasses.before.split(' '))
+      target.classList.add(...transitionClasses.start.split(' '))
     } else {
-      this.useTransitionClasses = false
-      this.transitions = this._transitionDefaults(openState)
+      target.dataset.useTransitionClasses = false
+      const transitions = this._transitionDefaults(openState)
       target.dataset.opacityCache = target.style.opacity
       target.dataset.transformCache = target.style.transform
       target.dataset.transformOriginCache = target.style.transformOrigin
 
-      target.style.opacity = this.transitions.from.opacity
-      target.style.transform = `scale(${this.transitions.from.scale / 100})`
+      target.style.opacity = transitions.from.opacity
+      target.style.transform = `scale(${transitions.from.scale / 100})`
     }
     if (openState) target.hidden = !target.hidden
   }
@@ -292,4 +301,4 @@ export default class RevealController extends Controller {
 
 export {
   RevealController
-} 
+}
