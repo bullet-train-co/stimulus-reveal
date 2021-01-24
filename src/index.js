@@ -57,8 +57,6 @@ export default class RevealController extends Controller {
     for (const target of targets) {
       this._doInitTransition(target, shouldOpen)
     }
-
-    this._initAwayListener()
   }
 
   /**
@@ -108,16 +106,9 @@ export default class RevealController extends Controller {
   /**
    * @private
    */
-  _initAwayListener () {
-    if (this.isOpen && this.data.has('away')) {
-      this.awayHandler = (event) => {
-        if (this.isOpen && !this.element.contains(event.target)) {
-          this.toggle(event)
-          document.removeEventListener('click', this.awayHandler)
-        }
-      }
-
-      document.addEventListener('click', this.awayHandler)
+  _awayHandler (event) {
+    if (!this.element.contains(event.target)) {
+      this.hide(event)
     }
   }
 
@@ -134,7 +125,7 @@ export default class RevealController extends Controller {
       })
     )
 
-    if ('transition' in target.dataset) {
+    if ('transition' in target.dataset && this.element.offsetParent !== null) {
       this.transitionEndHandler = () => {
         this._didEndTransition(target, openState)
       }
@@ -217,6 +208,15 @@ export default class RevealController extends Controller {
         cancelable: false
       })
     )
+
+    if (this.data.has('away')) {
+      if (openState) {
+        this.awayHandler = this._awayHandler.bind(this)
+        document.addEventListener('click', this.awayHandler)
+      } else {
+        document.removeEventListener('click', this.awayHandler)
+      }
+    }
 
     target.dispatchEvent(
       new Event('reveal:complete', { bubbles: true, cancelable: false })
