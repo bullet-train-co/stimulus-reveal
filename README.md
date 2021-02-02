@@ -25,7 +25,7 @@ Initialize the controller on a container element, add an action to toggle elemen
 
 ```html
 <div data-controller="reveal">
-  <a href="" data-action="click->reveal#toggle">Click me</a>
+  <a href="" data-action="reveal#toggle">Click me</a>
   <div hidden data-reveal>I toggle</div>
 </div>
 ```
@@ -35,17 +35,23 @@ Initialize the controller on a container element, add an action to toggle elemen
 
 #### Top Level options
 
-##### `data-reveal-targets` (default: `[data-reveal]`)
+##### `data-reveal-target-selector-value` (default: `[data-reveal]`)
 Setting this attribute to a selector will allow you to change the selector pattern for toggling elements.
 
-##### `data-reveal-keypress`
+##### `data-reveal-toggle-keys-value`
 Setting this attribute to a comma separated list of lower-case key names will toggle the reveal when they're pressed.
 
-##### `data-reveal-close-keypress`
+##### `data-reveal-show-keys-value`
+Setting this attribute to a comma separated list of lower-case key names will show the reveal when they're pressed.
+
+##### `data-reveal-hide-keys-value`
 Setting this attribute to a comma separated list of lower-case key names will close the reveal when they're pressed.
 
-##### `data-reveal-away`
+##### `data-reveal-away-value`
 Setting this attribute will close the reveal when the user clicks away from the reveal element.
+
+##### `data-reveal-open-value` (default: `false`)
+Setting this attribute to "true" will tell the controller that the default state is open for the reveal. The next toggle will close it.
 
 #### Element options
 
@@ -92,6 +98,27 @@ These options can be used to override the default transitions by setting classes
 </div>
 ```
 
+##### `data-(enter|leave)-(start|end)`
+These attributes allow you to toggle an element before or after the main transition. For instance if you need to unhide
+and element before an enter transition and hide it after a leave transition.
+
+###### Example
+
+```html
+<div data-controller="reveal">
+  <a href="" data-action="click->reveal#toggle">Click me</a>
+  <div hidden data-reveal data-enter-start data-leave-end>
+    <div hidden data-reveal data-transition
+      data-transition-enter="transition transform ease-out duration-200"
+      data-transition-enter-start="opacity-0 -translate-y-6 bg-transparent"
+      data-transition-enter-end="opacity-100 translate-y-0 bg-transparent"
+      data-transition-leave="transition transform ease-out duration-150"
+      data-transition-leave-start="opacity-100 translate-y-0 bg-transparent"
+      data-transition-leave-end="opacity-0 -translate-y-6 bg-transparent">
+      I toggle with custom transitions</div>
+  </div>
+</div>
+```
 
 ### Methods
 

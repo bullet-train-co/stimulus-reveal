@@ -38,7 +38,7 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "stimulus": "~1.1.1||~2.0"
+    "stimulus": "~2.0"
   },
   "bugs": {
     "url": "https://gitlab.com/initforthe/stimulus-reveal/issues"
