@@ -57,20 +57,17 @@ export default class RevealController extends Controller {
   /**
    * @private
    * @param {Event} event
+   * @param {Event} shouldOpen
    */
   async _init(event, shouldOpen) {
-    event?.preventDefault()
-
     // start stuff
-    const startSelector = `${this.selector}[data-${
-      shouldOpen ? 'enter' : 'leave'
-    }-start]`
+    const startSelector = `${this.selector}[data-${shouldOpen ? 'enter' : 'leave'
+      }-start]`
     const startPromises = this._didInitWithPromise(startSelector, shouldOpen)
     await Promise.all(startPromises)
 
-    const defaultSelector = `${this.selector}:not([data-${
-      shouldOpen ? 'enter' : 'leave'
-    }-start]):not([data-${shouldOpen ? 'enter' : 'leave'}-end])`
+    const defaultSelector = `${this.selector}:not([data-${shouldOpen ? 'enter' : 'leave'
+      }-start]):not([data-${shouldOpen ? 'enter' : 'leave'}-end])`
     const defaultPromises = this._didInitWithPromise(
       defaultSelector,
       shouldOpen
@@ -78,9 +75,8 @@ export default class RevealController extends Controller {
     await Promise.all(defaultPromises)
 
     // end stuff
-    const endSelector = `${this.selector}[data-${
-      shouldOpen ? 'enter' : 'leave'
-    }-end]`
+    const endSelector = `${this.selector}[data-${shouldOpen ? 'enter' : 'leave'
+      }-end]`
     const endPromises = this._didInitWithPromise(endSelector, shouldOpen)
     await Promise.all(endPromises)
   }
@@ -164,6 +160,7 @@ export default class RevealController extends Controller {
    */
   _doInitTransition(target, openState) {
     this._debug('init transition', `${openState ? 'open' : 'closed'}`, target)
+    this._debug('dispatching event', `reveal:${openState ? 'show' : 'hide'}`, target)
     target.dispatchEvent(
       new Event(`reveal:${openState ? 'show' : 'hide'}`, {
         bubbles: true,
@@ -281,6 +278,7 @@ export default class RevealController extends Controller {
     }
     this.openValue = openState
 
+    this._debug('dispatching event', `reveal:${openState ? 'shown' : 'hidden'}`, target)
     target.dispatchEvent(
       new Event(`reveal:${openState ? 'shown' : 'hidden'}`, {
         bubbles: true,
@@ -297,6 +295,7 @@ export default class RevealController extends Controller {
       }
     }
 
+    this._debug('dispatching event', 'reveal:complete', target)
     target.dispatchEvent(
       new Event('reveal:complete', { bubbles: true, cancelable: false })
     )
