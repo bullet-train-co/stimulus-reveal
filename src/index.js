@@ -291,13 +291,9 @@ export default class RevealController extends Controller {
       })
     )
 
-    if (this.hasAwayValue) {
-      if (openState) {
-        this.awayHandler = this._awayHandler.bind(this)
-        document.addEventListener('click', this.awayHandler)
-      } else {
-        document.removeEventListener('click', this.awayHandler)
-      }
+    if (this.hasAwayValue && openState) {
+      this.awayHandler = this._awayHandler.bind(this)
+      document.addEventListener('click', this.awayHandler, { once: true })
     }
 
     this._debug('dispatching event', 'reveal:complete', target)
