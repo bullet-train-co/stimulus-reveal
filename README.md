@@ -56,6 +56,14 @@ Setting this attribute will close the reveal when the user clicks away from the 
 ##### `data-reveal-open-value` (default: `false`)
 Setting this attribute to "true" will tell the controller that the default state is open for the reveal. The next toggle will close it.
 
+#### Trigger element options
+
+##### `data-reveal-prevent-default`
+If set on the trigger element, this will prevent the default action from being handled.
+
+##### `data-reveal-stop-propagation`
+If set on the trigger element, this will prevent the default action from being propagated.
+
 #### Element options
 
 You can set options per element to change how each one behaves.
