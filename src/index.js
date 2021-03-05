@@ -60,8 +60,10 @@ export default class RevealController extends Controller {
    * @param {Event} shouldOpen
    */
   async _init(event, shouldOpen) {
-    if ('revealPreventDefault' in event.currentTarget.dataset) { event.preventDefault() }
-    if ('revealStopPropagation' in event.currentTarget.dataset) { event.stopPropagation() }
+    if (event && event.currentTarget && event.currentTarget.dataset) {
+      if ('revealPreventDefault' in event.currentTarget.dataset) { event.preventDefault() }
+      if ('revealStopPropagation' in event.currentTarget.dataset) { event.stopPropagation() }
+    }
     // start stuff
     const startSelector = `${this.selector}[data-${shouldOpen ? 'enter' : 'leave'
       }-start]`
