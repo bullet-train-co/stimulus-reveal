@@ -151,6 +151,7 @@ export default class RevealController extends Controller {
     if (!this.element.contains(event.target)) {
       this.hide(event)
     }
+    return true
   }
 
   /**
