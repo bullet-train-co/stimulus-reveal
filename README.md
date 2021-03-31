@@ -44,11 +44,20 @@ Setting this attribute to a selector will allow you to change the selector patte
 ##### `data-reveal-toggle-keys-value`
 Setting this attribute to a comma separated list of lower-case key names will toggle the reveal when they're pressed.
 
+###### Example:
+`<div data-reveal-toggle-keys-value="a">`
+
 ##### `data-reveal-show-keys-value`
 Setting this attribute to a comma separated list of lower-case key names will show the reveal when they're pressed.
 
+###### Example:
+`<div data-reveal-toggle-keys-value="?">`
+
 ##### `data-reveal-hide-keys-value`
 Setting this attribute to a comma separated list of lower-case key names will close the reveal when they're pressed.
+
+###### Example:
+`<div data-reveal-toggle-keys-value="escape">`
 
 ##### `data-reveal-away-value`
 Setting this attribute will close the reveal when the user clicks away from the reveal element.
