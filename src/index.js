@@ -20,6 +20,7 @@ export default class RevealController extends Controller {
     this._initCloseKeypressListener()
     this._initToggleKeypressListener()
     this._initShowKeypressListener()
+    this._awayHandler = this._awayHandler.bind(this)
   }
   
   disconnect() {
@@ -94,7 +95,7 @@ export default class RevealController extends Controller {
    */
   _teardown() {
     if (this.hasAwayValue) {
-      document.removeEventListener('click', this.awayHandler)
+      document.removeEventListener('click', this._awayHandler)
     }
   }
 
@@ -166,7 +167,7 @@ export default class RevealController extends Controller {
    */
   _awayHandler(event) {
     if (!this.element.contains(event.target)) {
-      document.removeEventListener('click', this.awayHandler)
+      document.removeEventListener('click', this._awayHandler)
       this.hide(event)
     }
     return true
@@ -306,8 +307,7 @@ export default class RevealController extends Controller {
     )
 
     if (this.hasAwayValue && openState) {
-      this.awayHandler = this._awayHandler.bind(this)
-      document.addEventListener('click', this.awayHandler)
+      document.addEventListener('click', this._awayHandler)
     }
 
     this._debug('dispatching event', 'reveal:complete', target)
