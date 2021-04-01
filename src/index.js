@@ -21,6 +21,10 @@ export default class RevealController extends Controller {
     this._initToggleKeypressListener()
     this._initShowKeypressListener()
   }
+  
+  disconnect() {
+    this._teardown()
+  }
 
   /**
    * Shows elements connected to the controller.
@@ -83,6 +87,15 @@ export default class RevealController extends Controller {
       }-end]`
     const endPromises = this._didInitWithPromise(endSelector, shouldOpen)
     await Promise.all(endPromises)
+  }
+  
+  /**
+   * @private
+   */
+  _teardown() {
+    if (this.hasAwayValue) {
+      document.removeEventListener('click', this.awayHandler)
+    }
   }
 
   _didInitWithPromise(selector, shouldOpen) {
